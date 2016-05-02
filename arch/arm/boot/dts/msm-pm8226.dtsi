@@ -211,6 +211,9 @@
 			qcom,bms-iadc = <&pm8226_iadc>;
 			qcom,bms-adc_tm = <&pm8226_adc_tm>;
 
+			qcom,force-s3-on-suspend;
+			qcom,force-s2-in-charging;
+
 			qcom,bms-iadc@3800 {
 				reg = <0x3800 0x100>;
 			};
