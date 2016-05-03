@@ -1205,7 +1205,7 @@ static int dbs_input_connect(struct input_handler *handler,
 	struct input_handle *handle;
 	int error;
 
-	handle = kzalloc(sizeof(struct input_handle), GFP_KERNEL);
+	handle = kzalloc(sizeof(struct input_handle), GFP_ATOMIC);
 	if (!handle)
 		return -ENOMEM;
 
