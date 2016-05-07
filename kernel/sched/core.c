@@ -5209,9 +5209,9 @@ void idle_task_exit(void)
  * their home CPUs. So we just add the counter to another CPU's counter,
  * to keep the global sum constant after CPU-down:
  */
-static void migrate_nr_uninterruptible(struct rq *rq_src)
+static void migrate_nr_uninterruptible(struct rq *rq_src, unsigned int dest_cpu)
 {
-	struct rq *rq_dest = cpu_rq(cpumask_any(cpu_active_mask));
+	struct rq *rq_dest = cpu_rq(dest_cpu);
 
 	rq_dest->nr_uninterruptible += rq_src->nr_uninterruptible;
 	rq_src->nr_uninterruptible = 0;
@@ -5238,7 +5238,7 @@ static void migrate_tasks(unsigned int dead_cpu)
 {
 	struct rq *rq = cpu_rq(dead_cpu);
 	struct task_struct *next, *stop = rq->stop;
-	int dest_cpu;
+	int dest_cpu = 0;
 
 	/*
 	 * Fudge the rq selection such that the below task selection loop
@@ -5273,6 +5273,7 @@ static void migrate_tasks(unsigned int dead_cpu)
 	}
 
 	rq->stop = stop;
+	migrate_nr_uninterruptible(rq, dest_cpu);
 }
 
 #endif /* CONFIG_HOTPLUG_CPU */
@@ -5514,7 +5515,6 @@ migration_call(struct notifier_block *nfb, unsigned long action, void *hcpu)
 		BUG_ON(rq->nr_running != 1); /* the migration thread */
 		raw_spin_unlock_irqrestore(&rq->lock, flags);
 
-		migrate_nr_uninterruptible(rq);
 		calc_global_load_remove(rq);
 		break;
 #endif
