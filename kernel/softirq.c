@@ -456,7 +456,9 @@ static void tasklet_action(struct softirq_action *a)
 			if (!atomic_read(&t->count)) {
 				if (!test_and_clear_bit(TASKLET_STATE_SCHED, &t->state))
 					BUG();
+				trace_tasklet_entry(t);
 				t->func(t->data);
+				trace_tasklet_exit(t);
 				tasklet_unlock(t);
 				continue;
 			}
@@ -491,7 +493,9 @@ static void tasklet_hi_action(struct softirq_action *a)
 			if (!atomic_read(&t->count)) {
 				if (!test_and_clear_bit(TASKLET_STATE_SCHED, &t->state))
 					BUG();
+				trace_tasklet_entry(t);
 				t->func(t->data);
+				trace_tasklet_exit(t);
 				tasklet_unlock(t);
 				continue;
 			}
