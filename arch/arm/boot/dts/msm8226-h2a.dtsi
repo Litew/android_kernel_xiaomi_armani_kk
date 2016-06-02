@@ -219,6 +219,15 @@
 		qcom,cdc-us-euro-gpios = <&msmgpio 69 0>;
 	};
 
+	isa1000-ff-memless {
+		status = "ok";
+		compatible = "imagis,isa1000";
+		gpio-isa1000-en = <&msmgpio 33 0x00>;
+		gpio-haptic-en = <&msmgpio 50 0x00>;
+		timeout-ms = <15000>;
+		pwm-channel = <1>;
+       };
+
 	qcom,bam_dmux@fc834000 {
 		qcom,fast-shutdown;
 	};
